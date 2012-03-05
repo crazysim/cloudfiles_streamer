@@ -38,9 +38,15 @@ class CloudFilesStreamer::CloudFilesApi
 	  context "when only one segment was uploaded" do
 		it "renames the sole segment without a segment suffix" do
 		  prefix = "bob.dump"
+          object_name = "bob.dump.000"
 		  cf_object = double("CloudFiles object")
+
 		  cloudfiles_container.should_receive(:objects).
-			with(:prefix => prefix, :limit => 1).and_return(cf_object)
+			with(:prefix => prefix, :limit => 1).and_return([object_name])
+
+          cloudfiles_container.should_receive(:object).with(object_name).
+            and_return(cf_object)
+
 		  cf_object.should_receive(:move).with(:name => prefix)
 
 		  subject.create_manifest(prefix, 1)

@@ -32,7 +32,8 @@ module CloudFilesStreamer
 		  manifest = @container.create_object(prefix)
 		  manifest.write("", "X-Object-Manifest" => "#{@container.name}/#{prefix}")
 		else
-		  object = @container.objects(:prefix => prefix, :limit => 1)
+		  object_name = @container.objects(:prefix => prefix, :limit => 1).first
+          object = @container.object(object_name)
 		  object.move(:name => prefix)
 		end
 	  end
