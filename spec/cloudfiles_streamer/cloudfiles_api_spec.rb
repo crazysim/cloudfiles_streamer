@@ -1,5 +1,4 @@
 require 'cloudfiles_streamer/cloudfiles_api'
-require 'cloudfiles'
 
 module CloudFilesStreamer
   describe CloudFilesApi do

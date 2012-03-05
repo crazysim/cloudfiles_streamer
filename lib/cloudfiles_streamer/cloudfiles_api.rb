@@ -1,3 +1,5 @@
+require 'cloudfiles'
+
 module CloudFilesStreamer
   class CloudFilesApi
 	class PrefixNotUniqueError < RuntimeError; end
