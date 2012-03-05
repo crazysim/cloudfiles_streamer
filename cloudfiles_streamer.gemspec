@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
 
   s.name        = 'cloudfiles_streamer'
   s.version     = '0.1.0'
-  s.date        = '2012-03-02'
+  s.date        = '2012-03-05'
   s.summary     = "Stream files on STDIN to Rackspace's CloudFiles"
   s.description = ""
 
@@ -14,17 +14,31 @@ Gem::Specification.new do |s|
   s.homepage = 'http://receipt.com'
 
   s.require_paths = %w[lib]
-  s.executables = ["cloudfiles-stream"]
+  s.executables = ["cloudfiles-streamer"]
 
   s.rdoc_options = ["--charset=UTF-8"]
-  s.extra_rdoc_files = %w[README LICENSE]
+  s.extra_rdoc_files = %w[README.md LICENSE]
 
   s.add_dependency('cloudfiles', '~> 1.5')
   s.add_development_dependency('rspec', '~> 2.8')
 
   # = MANIFEST =
   s.files = %w[
-
+    LICENSE
+    README.md
+    Rakefile
+    bin/cloudfiles-streamer
+    cloudfiles_streamer.gemspec
+    lib/cloudfiles_streamer.rb
+    lib/cloudfiles_streamer/cloudfiles_api.rb
+    lib/cloudfiles_streamer/command_line_options.rb
+    lib/cloudfiles_streamer/segmented_stream.rb
+    lib/cloudfiles_streamer/streamer.rb
+    spec/cloudfiles_streamer/cloudfiles_api_container_spec.rb
+    spec/cloudfiles_streamer/cloudfiles_api_spec.rb
+    spec/cloudfiles_streamer/command_line_options_spec.rb
+    spec/cloudfiles_streamer/segmented_stream_spec.rb
+    spec/cloudfiles_streamer/streamer_spec.rb
   ]
   # = MANIFEST =
 

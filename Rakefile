@@ -95,9 +95,11 @@ task :release => :build do
   end
   sh "git commit --allow-empty -a -m 'Release #{version}'"
   sh "git tag v#{version}"
-  sh "git push origin master"
-  sh "git push origin v#{version}"
-  sh "gem push pkg/#{name}-#{version}.gem"
+  # sh "git push origin master"
+
+  sh %{chmod g+w pkg/#{gem_file}}
+  sh  %{scp pkg/#{gem_file} repo01:/srv/gemserver/data/gems/#{gem_file}}
+  sh  %{ssh repo01 "cd /srv/gemserver/data && sudo -u gemserver gem generate_index && sudo chown -R gemserver:nutricate /srv/gemserver/data"}
 end
 
 desc "Build #{gem_file} into the pkg directory"
