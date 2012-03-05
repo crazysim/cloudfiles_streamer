@@ -7,11 +7,11 @@ module CloudFilesStreamer
     let(:default_byte_count) { 4.5 * 1024 ** 3 }
 
     it "requires a prefix" do
-      expect { subject.parse([]) }.to raise_error(MissingPrefixArgument)
+      expect { subject.parse(%w{-c container}) }.to raise_error(MissingPrefixArgument)
     end
 
     it "defaults to 4.5GB byte count" do
-      valid_arguments = %w{--prefix myprefix -c mycontainer -u bob -p secret}
+      valid_arguments = %w{--prefix myprefix -c mycontainer -u bob -k secret}
       options = subject.parse(valid_arguments)
       options.byte_count.should == default_byte_count
     end
@@ -45,7 +45,7 @@ module CloudFilesStreamer
     end
 
     it "accepts the name of a CloudFiles container" do
-      options = subject.parse(%w{--prefix myprefix -c mycontainer -u bob -p secret})
+      options = subject.parse(%w{--prefix myprefix -c mycontainer -u bob -k secret})
       options.container.should == 'mycontainer'
     end
 
@@ -57,7 +57,7 @@ module CloudFilesStreamer
 
     describe "credentials" do
       it "accepts a CloudFiles username option" do
-        options = subject.parse(%w{--prefix myprefix -c mycontainer -u bob -p secret})
+        options = subject.parse(%w{--prefix myprefix -c mycontainer -u bob -k secret})
         options.cloudfiles_username.should == 'bob'
       end
 
@@ -68,7 +68,7 @@ module CloudFilesStreamer
       end
 
       it "accepts a CloudFiles API key" do
-        options = subject.parse(%w{--prefix myprefix -c mycontainer -u bob -p secret})
+        options = subject.parse(%w{--prefix myprefix -c mycontainer -u bob -k secret})
         options.cloudfiles_api_key.should == 'secret'
       end
 
@@ -80,7 +80,7 @@ module CloudFilesStreamer
 
       it "accepts a CloudFiles username as an ENV variable" do
         ENV['CLOUDFILES_USERNAME'] = 'alice'
-        options = subject.parse(%w{--prefix myprefix -c mycontainer -p secret})
+        options = subject.parse(%w{--prefix myprefix -c mycontainer -k secret})
         options.cloudfiles_username.should == 'alice'
       end
 
