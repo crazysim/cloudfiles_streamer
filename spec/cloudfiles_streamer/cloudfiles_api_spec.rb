@@ -1,6 +1,8 @@
 require 'cloudfiles_streamer/cloudfiles_api'
 
 module CloudFilesStreamer
+  class CloudFilesApi::Container; end
+
   describe CloudFilesApi do
 	it "can establish a connection to CloudFiles" do
 	  connection = stub("CloudFiles connection")

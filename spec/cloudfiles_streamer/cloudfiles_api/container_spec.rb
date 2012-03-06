@@ -1,4 +1,4 @@
-require 'cloudfiles_streamer/cloudfiles_api'
+require 'cloudfiles_streamer/cloudfiles_api/container'
 
 class CloudFilesStreamer::CloudFilesApi
   describe Container do
