@@ -12,13 +12,12 @@ module CloudFilesStreamer
         raise PrefixNotUniqueError if @container.object_exists?(name)
       end
 
-      def create_manifest(prefix, num_uploaded_segments)
+      def create_manifest(prefix, last_uploaded_object_name, num_uploaded_segments)
         if num_uploaded_segments > 1
           manifest = @container.create_object(prefix)
           manifest.write("", "X-Object-Manifest" => "#{@container.name}/#{prefix}")
         else
-          object_name = @container.objects(:prefix => prefix, :limit => 1).first
-          object = @container.object(object_name)
+          object = @container.object(last_uploaded_object_name)
           object.move(:name => prefix)
         end
       end

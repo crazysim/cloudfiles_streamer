@@ -21,35 +21,33 @@ class CloudFilesStreamer::CloudFilesApi
 	end
 
 	describe "creating a manifest" do
+      let(:prefix) { "bob.dump" }
+      let(:current_object_name) { "bob.dump.001" }
+
 	  context "when more than one segment was uploaded" do
 		it "creates the manifest" do
-		  prefix = "bob.dump"
 		  manifest = double("CloudFiles Manifest Object")
 
-		  cloudfiles_container.should_receive(:create_object).
-			with(prefix).and_return(manifest)
+		  cloudfiles_container.should_receive(:create_object).with(prefix).
+            and_return(manifest)
+
 		  manifest.should_receive(:write).
 			with("", { "X-Object-Manifest" => "bobcontainer/bob.dump" })
 
-		  subject.create_manifest(prefix, 2)
+		  subject.create_manifest(prefix, current_object_name, 2)
 		end
 	  end
 
 	  context "when only one segment was uploaded" do
 		it "renames the sole segment without a segment suffix" do
-		  prefix = "bob.dump"
-          object_name = "bob.dump.000"
 		  cf_object = double("CloudFiles object")
 
-		  cloudfiles_container.should_receive(:objects).
-			with(:prefix => prefix, :limit => 1).and_return([object_name])
-
-          cloudfiles_container.should_receive(:object).with(object_name).
+          cloudfiles_container.should_receive(:object).with(current_object_name).
             and_return(cf_object)
 
 		  cf_object.should_receive(:move).with(:name => prefix)
 
-		  subject.create_manifest(prefix, 1)
+		  subject.create_manifest(prefix, current_object_name, 1)
 		end
 	  end
 	end
