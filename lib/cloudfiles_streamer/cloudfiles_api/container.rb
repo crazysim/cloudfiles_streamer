@@ -2,6 +2,7 @@ module CloudFilesStreamer
   class CloudFilesApi
     class PrefixNotUniqueError < RuntimeError; end
     class DuplicateObjectError < RuntimeError; end
+    class InvalidSession < RuntimeError; end
 
     class Container
       def initialize(container)
@@ -30,6 +31,8 @@ module CloudFilesStreamer
           raise DuplicateObjectError,
             %{An object named "#{filename}" already exists in container "#{@container.name}"}
         end
+      rescue ::CloudFiles::Exception::InvalidResponse => error
+         raise InvalidSession if error.message =~ /response code 401\b/
       end
     end
   end

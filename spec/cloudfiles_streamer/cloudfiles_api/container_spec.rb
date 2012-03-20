@@ -1,5 +1,13 @@
 require 'cloudfiles_streamer/cloudfiles_api/container'
 
+class InvalidResponseException < StandardError; end
+
+module CloudFiles
+  class Exception
+    class InvalidResponse < InvalidResponseException; end
+  end
+end
+
 class CloudFilesStreamer::CloudFilesApi
   describe Container do
 	let(:cloudfiles_container) { double("CloudFiles container", :name => "bobcontainer") }
@@ -78,6 +86,17 @@ class CloudFilesStreamer::CloudFilesApi
 		  subject.create_object(filename, stream)
 		}.to raise_error(DuplicateObjectError)
 	  end
+
+      it "raises InvalidSession if the session is expired" do
+        exception = ::CloudFiles::Exception::InvalidResponse.new("Invalid response code 401")
+		cloudfiles_container.should_receive(:object_exists?).with(filename).
+          and_return(false)
+        cloudfiles_container.should_receive(:create_object).and_raise(exception)
+
+		expect {
+		  subject.create_object(filename, stream)
+		}.to raise_error(InvalidSession)
+      end
 	end
   end
 end

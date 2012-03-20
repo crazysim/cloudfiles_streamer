@@ -5,10 +5,18 @@ module CloudFilesStreamer
   class CommandLineOptions; end
   class SegmentedStream; end
 
+  class CloudFilesApi
+    class InvalidSession < RuntimeError; end
+  end
+
   describe Streamer do
 	let(:options) {
 	  {
-		:options => OpenStruct.new({ :prefix => "bob.dump" }),
+		:options => OpenStruct.new({
+          :prefix => "bob.dump",
+          :cloudfiles_username => "bob",
+          :cloudfiles_api_key  => "bobsecret"
+        }),
 		:stream => stub
 	  }
 	}
@@ -59,5 +67,19 @@ module CloudFilesStreamer
 		  from(0).to(1)
 	  end
 	end
+
+    it "re-establishes the connection when CloudFiles API token expires and retries up to three times" do
+      subject.stub(:container => container)
+      CloudFilesApi.stub(:get_or_create_container => container)
+
+      container.should_receive(:create_object).exactly(3).times.
+        and_raise(CloudFilesApi::InvalidSession)
+      CloudFilesApi.should_receive(:establish_connection).with("bob", "bobsecret").
+        exactly(3).times
+
+      expect {
+        subject.upload_segment_with_retries
+      }.to raise_error(MaxUploadAttemptsReached)
+    end
   end
 end
