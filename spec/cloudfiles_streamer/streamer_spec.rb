@@ -7,7 +7,7 @@ module CloudFilesStreamer
 
   describe Streamer do
 	let(:options) {
-	  options = {
+	  {
 		:options => OpenStruct.new({ :prefix => "bob.dump" }),
 		:stream => stub
 	  }
@@ -30,6 +30,21 @@ module CloudFilesStreamer
 	  streamer.stub(:segment_count => 5)
 	  streamer.segment_filename.should == "bob.dump.005"
 	end
+
+    it "creates the manifest" do
+      container = double("CloudFiles container")
+      streamer = Streamer.new(options)
+
+      streamer.stub(
+        :container => container,
+        :segment_count => 42,
+        :current_segment_filename => "bob.dump.042")
+
+      container.should_receive(:create_manifest).
+        with("bob.dump", "bob.dump.042", 42).once
+
+      streamer.create_manifest
+    end
 
 	describe "keeps track of segments uploaded" do
 	  it "starts at 0" do
