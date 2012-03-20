@@ -12,6 +12,10 @@ module CloudFilesStreamer
 		:stream => stub
 	  }
 	}
+    let(:io) { stub("IO object") }
+    let(:container) { double("CloudFiles container") }
+
+    subject { Streamer.new(options, io) }
 
 	it "parses command line options" do
 	  CommandLineOptions.should_receive(:parse).and_return(stub)
@@ -26,16 +30,12 @@ module CloudFilesStreamer
 	end
 
 	it "constructs segment filenames based on the current segment count" do
-	  streamer = Streamer.new(options)
-	  streamer.stub(:segment_count => 5)
-	  streamer.segment_filename.should == "bob.dump.005"
+	  subject.stub(:segment_count => 5)
+	  subject.segment_filename.should == "bob.dump.005"
 	end
 
     it "creates the manifest" do
-      container = double("CloudFiles container")
-      streamer = Streamer.new(options)
-
-      streamer.stub(
+      subject.stub(
         :container => container,
         :segment_count => 42,
         :current_segment_filename => "bob.dump.042")
@@ -43,21 +43,19 @@ module CloudFilesStreamer
       container.should_receive(:create_manifest).
         with("bob.dump", "bob.dump.042", 42).once
 
-      streamer.create_manifest
+      subject.create_manifest
     end
 
 	describe "keeps track of segments uploaded" do
 	  it "starts at 0" do
-		Streamer.new(options).segment_count.should == 0
+		subject.segment_count.should == 0
 	  end
 
 	  it "increments by 1 after a successful upload" do
-		container = double("CloudFiles container")
+		subject.stub(:container => container)
 		container.should_receive(:create_object).and_return(true)
-		streamer = Streamer.new(options)
-		streamer.stub!(:container => container)
 
-		expect { streamer.upload_segment }.to change { streamer.segment_count }.
+		expect { subject.upload_segment }.to change { subject.segment_count }.
 		  from(0).to(1)
 	  end
 	end
