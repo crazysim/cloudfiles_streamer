@@ -5,5 +5,5 @@ require "cloudfiles_streamer/segmented_stream"
 require "cloudfiles_streamer/streamer"
 
 module CloudFilesStreamer
-  VERSION = '0.1.1'
+  VERSION = '0.1.2'
 end
