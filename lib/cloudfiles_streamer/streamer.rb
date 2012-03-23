@@ -30,7 +30,7 @@ module CloudFilesStreamer
     end
 
     def create_manifest
-	  container.create_manifest(options.prefix, current_segment_filename, segment_count)
+	  container.create_manifest(options.prefix, segment_count)
     end
 
     def upload_segment_with_retries

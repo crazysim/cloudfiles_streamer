@@ -9,6 +9,8 @@ module CloudFiles
 end
 
 class CloudFilesStreamer::CloudFilesApi
+  class Manifest; end
+
   describe Container do
 	let(:cloudfiles_container) { double("CloudFiles container", :name => "bobcontainer") }
 
@@ -28,37 +30,16 @@ class CloudFilesStreamer::CloudFilesApi
 	  end
 	end
 
-	describe "creating a manifest" do
-      let(:prefix) { "bob.dump" }
-      let(:current_object_name) { "bob.dump.001" }
+    it "creates a manifest" do
+      prefix = "bob.dump"
+      num_uploaded = 1
+      manifest = double("Manifest wrapper")
 
-	  context "when more than one segment was uploaded" do
-		it "creates the manifest" do
-		  manifest = double("CloudFiles Manifest Object")
-
-		  cloudfiles_container.should_receive(:create_object).with(prefix).
-            and_return(manifest)
-
-		  manifest.should_receive(:write).
-			with("", { "X-Object-Manifest" => "bobcontainer/bob.dump" })
-
-		  subject.create_manifest(prefix, current_object_name, 2)
-		end
-	  end
-
-	  context "when only one segment was uploaded" do
-		it "renames the sole segment without a segment suffix" do
-		  cf_object = double("CloudFiles object")
-
-          cloudfiles_container.should_receive(:object).with(current_object_name).
-            and_return(cf_object)
-
-		  cf_object.should_receive(:move).with(:name => prefix)
-
-		  subject.create_manifest(prefix, current_object_name, 1)
-		end
-	  end
-	end
+      Manifest.should_receive(:new).with(cloudfiles_container, prefix, num_uploaded).
+        and_return(manifest)
+      manifest.should_receive(:create).once
+      subject.create_manifest(prefix, num_uploaded)
+    end
 
 	describe "creating objects" do
 	  let(:stream)   { double("IO stream") }
