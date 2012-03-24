@@ -5,8 +5,9 @@ module CloudFilesStreamer
     class InvalidSession < RuntimeError; end
 
     class Container
-      def initialize(container)
+      def initialize(container, manifest_class = nil)
         @container = container
+        @manifest_class ||= ::CloudFilesStreamer::CloudFilesApi::Manifest
       end
 
       def ensure_unique_prefix!(name)
@@ -14,7 +15,7 @@ module CloudFilesStreamer
       end
 
       def create_manifest(prefix, num_uploaded)
-        Manifest.new(@container, prefix, num_uploaded).create
+        @manifest_class.new(@container, prefix, num_uploaded).create
       end
 
       def create_object(filename, file)
