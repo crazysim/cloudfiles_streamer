@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.extra_rdoc_files = %w[README.md LICENSE]
 
-  s.add_dependency('cloudfiles', '~> 1.5')
+  s.add_dependency('sr_cloudfiles', '~> 1.5')
   s.add_development_dependency('rspec', '~> 2.8')
 
   # = MANIFEST =
