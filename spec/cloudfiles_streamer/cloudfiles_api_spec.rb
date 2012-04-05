@@ -6,8 +6,11 @@ module CloudFilesStreamer
   describe CloudFilesApi do
 	it "can establish a connection to CloudFiles" do
 	  connection = stub("CloudFiles connection")
+
+      SwiftClient.should_receive(:read_timeout=).with(120)
 	  CloudFiles::Connection.should_receive(:new).
 		with(:username => "bob", :api_key => "secret").and_return(connection)
+
 	  CloudFilesApi.establish_connection("bob", "secret")
 	  CloudFilesApi.connection.should == connection
 	end
