@@ -4,7 +4,7 @@ module CloudFilesStreamer
   class CloudFilesApi
 
 	def self.establish_connection(username, api_key)
-      SwiftClient.read_timeout = 120
+      SwiftClient.read_timeout = 240
 	  @connection = CloudFiles::Connection.new(
 		:username => username, :api_key => api_key)
 	end
