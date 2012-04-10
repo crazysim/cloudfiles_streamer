@@ -43,9 +43,9 @@ module CloudFilesStreamer
 	end
 
     it "creates the manifest" do
-      subject.stub(:container => container, :segment_count => 42)
+      subject.stub(:container => container)
 
-      container.should_receive(:create_manifest).with("bob.dump", 42).once
+      container.should_receive(:create_manifest).with("bob.dump").once
 
       subject.create_manifest
     end

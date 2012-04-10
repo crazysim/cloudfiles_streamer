@@ -35,10 +35,10 @@ class CloudFilesStreamer::CloudFilesApi
       num_uploaded = 1
       manifest = double("Manifest wrapper")
 
-      Manifest.should_receive(:new).with(cloudfiles_container, prefix, num_uploaded).
+      Manifest.should_receive(:new).with(cloudfiles_container, prefix).
         and_return(manifest)
       manifest.should_receive(:create).once
-      subject.create_manifest(prefix, num_uploaded)
+      subject.create_manifest(prefix)
     end
 
 	describe "creating objects" do

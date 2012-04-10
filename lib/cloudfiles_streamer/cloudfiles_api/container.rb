@@ -14,8 +14,8 @@ module CloudFilesStreamer
         raise PrefixNotUniqueError if @container.object_exists?(name)
       end
 
-      def create_manifest(prefix, num_uploaded)
-        @manifest_class.new(@container, prefix, num_uploaded).create
+      def create_manifest(prefix)
+        @manifest_class.new(@container, prefix).create
       end
 
       def create_object(filename, file)
