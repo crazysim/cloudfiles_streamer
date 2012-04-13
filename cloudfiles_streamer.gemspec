@@ -4,8 +4,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = '1.3.5'
 
   s.name        = 'cloudfiles_streamer'
-  s.version     = '0.1.6'
-  s.date        = '2012-04-10'
+  s.version     = '0.1.7'
+  s.date        = '2012-04-13'
   s.summary     = "Stream files on STDIN to Rackspace's CloudFiles"
   s.description = ""
 
