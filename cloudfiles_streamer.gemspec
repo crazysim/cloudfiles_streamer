@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('cloudfiles', '~> 1.5')
   s.add_development_dependency('rspec', '~> 2.8')
-  s.add_development_dependency('rake', '~> 10.0.3')
+  s.add_development_dependency('rake')
 
   # = MANIFEST =
   s.files = %w[
