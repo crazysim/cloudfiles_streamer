@@ -21,8 +21,7 @@ module CloudFilesStreamer
 
 	  before do
 		CloudFilesApi.stub(:connection => connection)
-		CloudFilesApi::Container.should_receive(:new).with(container).
-		  and_return(wrapped_container)
+        CloudFilesApi::Container.stub(:new => wrapped_container)
 	  end
 
 	  context "when the container exists" do
